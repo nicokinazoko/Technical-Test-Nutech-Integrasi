@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
+import './db/config.js';
+
 dotenv.config({ path: '.env-dev' });
 
 const port = process.env.PORT || 4000;
