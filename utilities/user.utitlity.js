@@ -4,7 +4,7 @@ async function CheckExistingUser(email) {
   if (!email) throw new Error('parameter email is required');
 
   const checkExistingUser = await UserModel.findOne({
-    email,
+    email: email.trim(),
   }).select('_id');
 
   if (checkExistingUser) {
