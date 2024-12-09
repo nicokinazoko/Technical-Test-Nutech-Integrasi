@@ -38,8 +38,11 @@ async function GetAllTransactionHistory({ offset = 0, limit = null, token }) {
     return {
       invoice_number: transactionHistory?.invoice_number || '',
       transaction_type: transactionHistory?.transaction_type || '',
-      description: transactionHistory?.service_id?.service_name || '',
-      total_amount: +transactionHistory?.service_id?.service_tariff || 0,
+      description:
+        transactionHistory?.service_id?.service_name ||
+        transactionHistory?.description ||
+        '',
+      total_amount: +transactionHistory?.total_amount || 0,
       created_on: transactionHistory?.createdAt || '',
     };
   });
