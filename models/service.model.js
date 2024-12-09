@@ -17,6 +17,11 @@ const serviceSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  status: {
+    type: String,
+    enum: ['active', 'deleted'],
+    default: 'active',
+  },
 });
 
 const serviceModel = mongoose.model('services', serviceSchema);
