@@ -86,4 +86,22 @@ async function GetOneUserBasedOnToken({ token }) {
   };
 }
 
-export { CreateUser, GetOneUserBasedOnToken };
+async function GetOneUserBalanceBasedonToken({ token }) {
+  const emailFromToken = await GetEmailFromToken({ tokenData: token });
+
+  if (!emailFromToken) {
+    return null;
+  }
+
+  const user = await GetOneUserBasedOnEmail({ email: emailFromToken });
+
+  return {
+    status: 0,
+    message: 'Get Balance Berhasil',
+    data: {
+      balance: user?.balance || 0,
+    },
+  };
+}
+
+export { CreateUser, GetOneUserBasedOnToken, GetOneUserBalanceBasedonToken };
