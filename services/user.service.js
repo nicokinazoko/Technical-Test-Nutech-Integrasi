@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 import UserModel from '../models/user.model.js';
 import {
   CreateSalt,
@@ -104,4 +102,53 @@ async function GetOneUserBalanceBasedonToken({ token }) {
   };
 }
 
-export { CreateUser, GetOneUserBasedOnToken, GetOneUserBalanceBasedonToken };
+async function UpdateUserBasedOnToken({ token, first_name, last_name }) {
+  const emailFromToken = await GetEmailFromToken({ tokenData: token });
+  const updateData = {};
+
+  if (!emailFromToken) {
+    return null;
+  }
+
+  const user = await GetOneUserBasedOnEmail({ email: emailFromToken });
+
+  if (!user) {
+    return null;
+  }
+
+  if (first_name) {
+    updateData.first_name = first_name;
+  }
+
+  if (last_name) {
+    updateData.last_name = last_name;
+  }
+
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    user._id,
+    {
+      $set: updateData,
+    },
+    {
+      new: true,
+    }
+  );
+
+  return {
+    status: 0,
+    message: 'Update Pofile berhasil',
+    data: {
+      email: updatedUser?.email || '',
+      first_name: user?.first_name || '',
+      last_name: user?.last_name || '',
+      profile_image: updatedUser?.profile_image,
+    },
+  };
+}
+
+export {
+  CreateUser,
+  GetOneUserBasedOnToken,
+  GetOneUserBalanceBasedonToken,
+  UpdateUserBasedOnToken,
+};
