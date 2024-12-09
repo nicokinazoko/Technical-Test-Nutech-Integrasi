@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const transactionHistorySchema = mongoose.Schema(
   {
     invoice_number: {
-      default: String,
+      type: String,
       required: true,
     },
     service_id: {
