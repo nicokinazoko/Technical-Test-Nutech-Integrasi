@@ -16,28 +16,39 @@ async function GenerateHashedPassword(password, salt) {
 }
 
 async function ValidateEmail({ email }) {
-  return emailRegex.test(email);
+  if (!emailRegex.test(email)) {
+    return {
+      status: 102,
+      message: 'Parameter email tidak sesuai format',
+      data: null,
+    };
+  }
 }
 
-async function ValidateInput({ value, field_name = 'input' }) {
+async function ValidatePassword({ password }) {
+  if (password.length < 8) {
+    return {
+      status: 102,
+      message: 'Parameter password tidak sesuai format',
+      data: null,
+    };
+  }
+}
+
+async function ValidateRequiredInput({ value, field_name = 'input' }) {
   if (!value) {
     return {
       status: 102,
       message: `Parameter ${field_name} tidak boleh kosong`,
       data: null,
     };
-  } else {
-    if (
-      (field_name === 'email' && !emailRegex.test(value)) ||
-      (field_name === 'password' && value.length < 8)
-    ) {
-      return {
-        status: 102,
-        message: `Parameter ${field_name} tidak sesuai format`,
-        data: null,
-      };
-    }
   }
 }
 
-export { CreateSalt, GenerateHashedPassword, ValidateEmail, ValidateInput };
+export {
+  CreateSalt,
+  GenerateHashedPassword,
+  ValidateEmail,
+  ValidatePassword,
+  ValidateRequiredInput,
+};

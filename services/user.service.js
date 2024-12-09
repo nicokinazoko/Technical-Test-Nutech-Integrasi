@@ -5,15 +5,15 @@ import {
   CreateSalt,
   GenerateHashedPassword,
   ValidateEmail,
-  ValidateInput,
+  ValidatePassword,
+  ValidateRequiredInput,
 } from '../utilities/common.utility.js';
 
 import { CheckExistingUser } from '../utilities/user.utitlity.js';
 
 async function CreateUser({ email, first_name, last_name, password }) {
-  const emailValidation = await ValidateInput({
-    field_name: 'email',
-    value: email,
+  const emailValidation = await ValidateEmail({
+    email,
   });
 
   if (emailValidation) return emailValidation;
@@ -22,23 +22,22 @@ async function CreateUser({ email, first_name, last_name, password }) {
 
   if (checkExistingUser) return checkExistingUser;
 
-  const firstNameValidation = await ValidateInput({
+  const firstNameValidation = await ValidateRequiredInput({
     field_name: 'first_name',
     value: first_name,
   });
 
   if (firstNameValidation) return firstNameValidation;
 
-  const lastNameValidation = await ValidateInput({
+  const lastNameValidation = await ValidateRequiredInput({
     field_name: 'last_name',
     value: last_name,
   });
 
   if (lastNameValidation) return lastNameValidation;
 
-  const passwordValidation = await ValidateInput({
-    field_name: 'password',
-    value: last_name,
+  const passwordValidation = await ValidatePassword({
+    password,
   });
 
   if (passwordValidation) return passwordValidation;
@@ -53,7 +52,7 @@ async function CreateUser({ email, first_name, last_name, password }) {
     hashed_password: hashedPassword,
   };
 
-  const newUser = await UserModel.create(inputDataUser);
+  await UserModel.create(inputDataUser);
 
   return {
     status: 0,
