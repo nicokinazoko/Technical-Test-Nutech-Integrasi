@@ -5,9 +5,7 @@ async function CheckExistingUser(email) {
 
   const checkExistingUser = await UserModel.findOne({
     email: email.trim(),
-  })
-    .select('_id')
-    .lean();
+  }).lean();
 
   if (checkExistingUser) {
     return {
@@ -20,4 +18,13 @@ async function CheckExistingUser(email) {
   return checkExistingUser;
 }
 
-export { CheckExistingUser };
+async function GetOneUserBasedOnEmail({ email }) {
+  if (!email) {
+    throw new Error('Email is required');
+  }
+  const user = await UserModel.findOne({ email }).lean();
+
+  return user;
+}
+
+export { CheckExistingUser, GetOneUserBasedOnEmail };

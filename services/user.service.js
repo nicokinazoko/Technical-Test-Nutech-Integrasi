@@ -9,7 +9,11 @@ import {
   ValidateRequiredInput,
 } from '../utilities/common.utility.js';
 
-import { CheckExistingUser } from '../utilities/user.utitlity.js';
+import {
+  CheckExistingUser,
+  GetOneUserBasedOnEmail,
+} from '../utilities/user.utitlity.js';
+import { GetEmailFromToken } from '../utilities/login.utility.js';
 
 async function CreateUser({ email, first_name, last_name, password }) {
   const emailValidation = await ValidateEmail({
@@ -61,4 +65,25 @@ async function CreateUser({ email, first_name, last_name, password }) {
   };
 }
 
-export { CreateUser };
+async function GetOneUserBasedOnToken({ token }) {
+  const emailFromToken = await GetEmailFromToken({ tokenData: token });
+
+  if (!emailFromToken) {
+    return null;
+  }
+
+  const user = await GetOneUserBasedOnEmail({ email: emailFromToken });
+
+  return {
+    status: 0,
+    message: 'Sukses',
+    data: {
+      email: user?.email || '',
+      first_name: user?.first_name || '',
+      last_name: user?.last_name || '',
+      profile_image: user?.profile_image || '',
+    },
+  };
+}
+
+export { CreateUser, GetOneUserBasedOnToken };
