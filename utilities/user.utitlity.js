@@ -5,7 +5,9 @@ async function CheckExistingUser(email) {
 
   const checkExistingUser = await UserModel.findOne({
     email: email.trim(),
-  }).select('_id');
+  })
+    .select('_id')
+    .lean();
 
   if (checkExistingUser) {
     return {
