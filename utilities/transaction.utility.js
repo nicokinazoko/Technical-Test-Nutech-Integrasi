@@ -1,5 +1,5 @@
-import transactionHistoryModel from '../models/transaction_history.model.js';
 import TransactionHistoryModel from '../models/transaction_history.model.js';
+
 import moment from 'moment';
 
 async function GenerateInvoiceNumber() {
