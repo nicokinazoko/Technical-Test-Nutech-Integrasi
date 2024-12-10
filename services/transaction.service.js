@@ -1,5 +1,4 @@
-import UserModel from '../models/user.model.js';
-import TransactionHistoryModel from '../models/transaction_history.model.js';
+import { GenerateQueryMongoDB } from '../utilities/common.utility.js';
 
 import { GetOneUserBasedOnEmail } from '../utilities/user.utitlity.js';
 import { GenerateInvoiceNumber } from '../utilities/transaction.utility.js';
@@ -53,15 +52,14 @@ async function TopUpBalanceForUser({ top_up_amount, email }) {
     // calculate balance for user
     const updatedBalance = (user?.balance || 0) + top_up_amount;
 
-    // update balance user
-    await UserModel.updateOne(
-      { _id: user._id },
-      {
-        $set: {
-          balance: updatedBalance,
-        },
-      }
-    );
+    const parameterUpdate = { _id: user._id };
+    const updatedData = { balance: updatedBalance };
+    await GenerateQueryMongoDB({
+      collection_name: 'users',
+      query: 'update',
+      parameter: parameterUpdate,
+      data: updatedData,
+    });
 
     // generate invoice code
     const invoiceCode = await GenerateInvoiceNumber();
@@ -75,7 +73,11 @@ async function TopUpBalanceForUser({ top_up_amount, email }) {
     };
 
     // create transaction history for topup
-    await TransactionHistoryModel.create(dataTransactionHistory);
+    await GenerateQueryMongoDB({
+      collection_name: 'transaction_histories',
+      query: 'create',
+      data: dataTransactionHistory,
+    });
 
     // return data
     return {
@@ -143,19 +145,21 @@ async function CreateTransaction({ service_code, email }) {
   // calculate updated balance
   const updatedBalance = (user?.balance || 0) - service.service_tariff;
 
+  const parameterUpdate = { _id: user._id };
+  const updatedData = { balance: updatedBalance };
+
   // update balance in user
-  await UserModel.updateOne(
-    { _id: user._id },
-    {
-      $set: {
-        balance: updatedBalance,
-      },
-    }
-  );
+  await GenerateQueryMongoDB({
+    collection_name: 'users',
+    query: 'update',
+    parameter: parameterUpdate,
+    data: updatedData,
+  });
 
   // generate invoice code
   const invoiceCode = await GenerateInvoiceNumber();
 
+  const dateCreated = new Date();
   // define data for create history transaction
   const dataTransactionHistory = {
     invoice_number: invoiceCode,
@@ -163,24 +167,27 @@ async function CreateTransaction({ service_code, email }) {
     total_amount: service.service_tariff,
     user_id: user._id,
     service_id: service._id,
+    createdAt: dateCreated,
   };
 
   // create data transaction history
-  const transactionHistory = await TransactionHistoryModel.create(
-    dataTransactionHistory
-  );
+  await GenerateQueryMongoDB({
+    collection_name: 'transaction_histories',
+    query: 'create',
+    data: dataTransactionHistory,
+  });
 
   // return transaction data
   return {
     status: 0,
     message: 'Transaksi berhasil',
     data: {
-      invoice_number: transactionHistory?.invoice_number || '',
+      invoice_number: dataTransactionHistory?.invoice_number || '',
       service_code: service?.service_code || '',
       service_name: service?.service_name || '',
-      transaction_type: transactionHistory?.transaction_type || '',
-      total_amount: transactionHistory.total_amount || 0,
-      created_on: transactionHistory?.createdAt || '',
+      transaction_type: dataTransactionHistory?.transaction_type || '',
+      total_amount: dataTransactionHistory.total_amount || 0,
+      created_on: dataTransactionHistory?.createdAt || '',
     },
   };
 }
