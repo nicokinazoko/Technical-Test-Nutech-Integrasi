@@ -1,5 +1,4 @@
-import TransactionHistoryModel from '../models/transaction_history.model.js';
-import { GetOneUserBasedOnEmail } from '../utilities/user.utitlity.js';
+import { GenerateAggregateQueryGetAllTransactionHistories } from '../utilities/transaction.utility.js';
 
 /**
  * Retrieves all transaction histories for a specific user with optional pagination.
@@ -32,31 +31,17 @@ import { GetOneUserBasedOnEmail } from '../utilities/user.utitlity.js';
  */
 async function GetAllTransactionHistories({ offset = 0, limit = null, email }) {
   try {
-    // declare match query active
-    const queryMatch = [{ status: 'active' }];
+    // build query aggregate find
+    const queryBuilder = await GenerateAggregateQueryGetAllTransactionHistories(
+      {
+        collection_name: 'transaction_histories',
+        email,
+        pagination: { offset, limit },
+      }
+    );
 
-    // get data user based on email to find user id
-    const user = await GetOneUserBasedOnEmail({ email });
-
-    // if email exists, then add user id in query match
-    if (user?.email) {
-      queryMatch.push({ user_id: user._id });
-    }
-
-    // define query to find with query match and sort latest data
-    const query = TransactionHistoryModel.find({ $and: queryMatch }).sort({
-      createdAt: -1,
-    });
-
-    // if limit not null, then add pagination
-    if (limit != null) {
-      query.skip(offset * limit).limit(limit);
-    }
-
-    // run query and populate the data
-    const transactionHistories = await query
-      .populate([{ path: 'service_id', select: 'service_name service_tariff' }])
-      .lean();
+    // run query builder
+    const transactionHistories = await queryBuilder;
 
     // map the return
     const records = transactionHistories.map((transactionHistory) => {
