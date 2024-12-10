@@ -1,4 +1,4 @@
-import BannerModel from '../models/banner.model.js';
+import { GenerateQueryMongoDB } from '../utilities/common.utility.js';
 
 /**
  * Fetches all active banners from the database.
@@ -19,16 +19,27 @@ import BannerModel from '../models/banner.model.js';
 
 async function GetAllBanners() {
   try {
+    // set parameter query to find
+    const parameterQuery = { status: 'active' };
+
     // find banners
-    const banners = await BannerModel.find({ status: 'active' })
-      .select('-_id')
-      .lean();
+    const banners = await GenerateQueryMongoDB({
+      collection_name: 'banners',
+      query: 'find',
+      parameter: parameterQuery,
+    });
 
     // return banners
     return {
       status: 0,
       message: 'Sukses',
-      data: banners,
+      data: banners.map((banner) => {
+        return {
+          banner_name: banner?.banner_name || '',
+          banner_image: banner?.banner_image || '',
+          description: banner?.description || '',
+        };
+      }),
     };
   } catch (error) {
     console.log('Error GetAllBanners', error);
