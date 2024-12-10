@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import cloudinary from 'cloudinary';
+import fs from 'fs';
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const saltRounds = 10;
@@ -106,10 +108,72 @@ async function ValidateRequiredInput({ value, field_name = 'input' }) {
   }
 }
 
+/**
+ * Upload a single file (image) to Cloudinary.
+ *
+ * This function validates the file type, generates a unique public ID, uploads the file to Cloudinary,
+ * and then deletes the file from the local storage.
+ *
+ * @async
+ * @function UploadSingleFile
+ * @param {Object} params - The parameters for the file upload.
+ * @param {Object} params.file - The file to upload, which must have a valid mimetype.
+ * @returns {Object} The result of the Cloudinary upload.
+ *
+ * @throws {Error} Throws an error if:
+ * - The file type is not valid (status 400).
+ * - Any other error occurs during the upload process (status 500).
+ */
+async function UploadSingleFile({ file }) {
+  try {
+    // set valid types for upload file
+    const validTypes = ['image/jpeg', 'image/png'];
+
+    // check if file type is valid
+    if (!validTypes.includes(file.mimetype)) {
+      // throw error
+      const error = new Error('Format Image tidak sesuai');
+      error.status = 400;
+      throw error;
+    }
+
+    // generate uuid for public id
+    const UUID = generateUUID();
+
+    // upload file to cloudinary
+    const uploadResult = await cloudinary.uploader.upload(file.path, {
+      resource_type: 'image',
+      folder: 'user_profile_images', // Folder in Cloudinary
+      public_id: `profile_${UUID}`, // Use the user's email as part of the public ID to make it unique
+    });
+
+    // remove file local
+    fs.unlinkSync(file.path);
+
+    // return result upload
+    return uploadResult;
+  } catch (error) {
+    // log the error
+    console.log(error);
+
+    throw new Error(error.message);
+  }
+}
+
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export {
   CreateSalt,
   GenerateHashedPassword,
   ValidateEmail,
   ValidatePassword,
   ValidateRequiredInput,
+  UploadSingleFile,
+  generateUUID,
 };
