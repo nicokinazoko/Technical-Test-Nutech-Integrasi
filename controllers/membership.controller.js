@@ -1,6 +1,7 @@
 import {
   CreateUser,
   GetOneProfileBasedOnEmail,
+  UpdateUserBasedEmail,
 } from '../services/user.service.js';
 
 import {
@@ -156,7 +157,7 @@ async function LoginController(req, res) {
  * Controller function to handle retrieving a user's profile based on their email.
  *
  * This function extracts the user's email from the request (using the token data),
- * calls the `GetOneProfileBasedOnEmail` function to fetch the user's profile, 
+ * calls the `GetOneProfileBasedOnEmail` function to fetch the user's profile,
  * and returns the result in the response. If an error occurs, it returns an appropriate error message.
  *
  * @async
@@ -164,7 +165,7 @@ async function LoginController(req, res) {
  * @param {Object} req - The request object containing the user's email from the token.
  * @param {Object} res - The response object used to send the API response.
  * @returns {Promise<void>} A promise that resolves when the response is sent.
- * 
+ *
  * @throws {Error} If the profile retrieval fails, it will send a 400 error for validation issues or a 500 error for other problems.
  */
 
@@ -179,6 +180,63 @@ async function GetOneProfileController(req, res) {
     // return result profile
     res.status(200).json(resultProfile);
   } catch (error) {
+    // log the error
+    console.log(error);
+    if (error.status === 400) {
+      // return error to api
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
+  }
+}
+
+/**
+ * Controller function to handle updating a user's profile.
+ *
+ * This function extracts the user's email from the request (using the token data),
+ * retrieves the updated first name and last name from the request body,
+ * and calls the `UpdateUserBasedEmail` function to update the user's information in the database.
+ * If the update is successful, the result is returned. If an error occurs, an appropriate error message is sent.
+ *
+ * @async
+ * @function UpdateMemberController
+ * @param {Object} req - The request object containing the user's data in the body and user information from the token.
+ * @param {Object} res - The response object used to send the API response.
+ * @returns {Promise<void>} A promise that resolves when the response is sent.
+ *
+ * @throws {Error} If the profile update fails, the function will return a 400 error for validation issues or a 500 error for other problems.
+ */
+
+async function UpdateMemberController(req, res) {
+  try {
+    // get data user from middleware
+    const { email } = req.user;
+
+    // get first name and last name from body
+    const { first_name, last_name } = req.body;
+
+    // call function to update user
+    const resultUpdateMember = await UpdateUserBasedEmail({
+      email,
+      first_name,
+      last_name,
+    });
+
+    // return result profile
+    res.status(200).json(resultUpdateMember);
+  } catch (error) {
+    // log the error
+    console.log(error);
     if (error.status === 400) {
       // return error to api
       res.status(400).json({
@@ -201,4 +259,5 @@ export {
   RegisterMembershipController,
   LoginController,
   GetOneProfileController,
+  UpdateMemberController,
 };
