@@ -6,10 +6,25 @@ import {
   ValidateRequiredInput,
 } from '../utilities/common.utility.js';
 
-import {
-  CheckExistingUser,
-  GetOneUserBasedOnEmail,
-} from '../utilities/user.utitlity.js';
+import { CheckExistingUser } from '../utilities/user.utitlity.js';
+import { Login } from '../services/login.service.js';
+
+/**
+ * Controller function to handle the registration of a new user for membership.
+ *
+ * This function validates the input data (email, first name, last name, and password), checks if the email is already
+ * in use, and then calls the `CreateUser` function to create a new user in the database. If any validation fails,
+ * an appropriate error message is returned. If user creation is successful, a success message is returned.
+ * 
+ * @async
+ * @function RegisterMembershipController
+ * @param {Object} req - The request object containing the user's data in the body.
+ * @param {Object} res - The response object used to send the API response.
+ * @returns {Promise<void>} A promise that resolves when the response is sent.
+ * 
+ * @throws {Error} If any of the validation steps or user creation fails, it will catch the error and send an appropriate
+ * error response (400 for invalid input, 500 for other issues).
+ */
 
 async function RegisterMembershipController(req, res) {
   try {
@@ -52,13 +67,86 @@ async function RegisterMembershipController(req, res) {
     // log the error
     console.error('Error in RegisterMembershipController:', error);
 
-    // return error to api
-    res.status(500).json({
-      status: 102,
-      message: error.message,
-      data: null,
-    });
+    if (error.status === 400) {
+      // return error to api
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
   }
 }
 
-export { RegisterMembershipController };
+/**
+ * Controller function to handle user login.
+ *
+ * This function validates the user's email and password from the request body, 
+ * and calls the `Login` function to authenticate the user. If validation or authentication fails, 
+ * an appropriate error message is returned. If login is successful, the login result is returned.
+ *
+ * @async
+ * @function LoginController
+ * @param {Object} req - The request object containing the user's email and password in the body.
+ * @param {Object} res - The response object used to send the API response.
+ * @returns {Promise<void>} A promise that resolves when the response is sent.
+ * 
+ * @throws {Error} If any validation or login process fails, it will catch the error and send an appropriate
+ * error response (401 for invalid credentials, 400 for invalid input, 500 for other issues).
+ */
+
+async function LoginController(req, res) {
+  try {
+    // get data email and password from body
+    const { email, password } = req.body;
+
+    // validate email
+    await ValidateEmail({
+      email,
+    });
+
+    // validate password
+    await ValidatePassword({
+      password,
+    });
+
+    const resultLogin = await Login({ email, password });
+
+    // return respond from login
+    res.status(200).json(resultLogin);
+  } catch (error) {
+    // log the error
+    console.error('Error in LoginController:', error);
+
+    if (error.status === 401) {
+      return res.status(401).json({
+        status: 401,
+        message: 'Username atau password salah',
+        data: null,
+      });
+    } else if (error.status === 400) {
+      // return error to api
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
+  }
+}
+
+export { RegisterMembershipController, LoginController };
