@@ -1,20 +1,38 @@
 import { GenerateQueryMongoDB } from '../utilities/common.utility.js';
 
 /**
- * Fetches all active banners from the database.
+ * Retrieves all active banners from the database.
  *
- * This function queries the `BannerModel` for all documents where the `status` is 'active',
- * and returns a structured response with the banner data, excluding the `_id` field.
- * In case of an error, the function logs the error and throws an error with the message.
+ * This function queries the 'banners' collection to find all banners with a status of 'active'.
+ * The banners are mapped to include specific fields: `banner_name`, `banner_image`, and `description`.
  *
  * @async
- * @function GetAllBanners
- * @returns {Promise<Object>} A promise that resolves to an object containing the following properties:
- *   - `status` {number} - A status code indicating success (0 for success).
- *   - `message` {string} - A message indicating the outcome (e.g., 'Sukses' for success).
- *   - `data` {Array<Object>} - An array of banner objects with active status.
+ * @function
  *
- * @throws {Error} Throws an error if the database query fails or an error occurs.
+ * @returns {Promise<Object>} A promise that resolves to an object containing the status, message, and a list of banners.
+ *
+ * @throws {Error} Throws an error if the query fails or an exception occurs.
+ *
+ * @example
+ * const banners = await GetAllBanners();
+ * console.log(banners);
+ * // Example response:
+ * // {
+ * //   status: 0,
+ * //   message: 'Sukses',
+ * //   data: [
+ * //     {
+ * //       banner_name: 'Summer Sale',
+ * //       banner_image: 'https://example.com/banner1.jpg',
+ * //       description: 'Discounts up to 50%',
+ * //     },
+ * //     {
+ * //       banner_name: 'New Arrivals',
+ * //       banner_image: 'https://example.com/banner2.jpg',
+ * //       description: 'Check out the latest collection',
+ * //     },
+ * //   ],
+ * // }
  */
 
 async function GetAllBanners() {

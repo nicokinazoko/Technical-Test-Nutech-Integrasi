@@ -5,26 +5,37 @@ import { GenerateInvoiceNumber } from '../utilities/transaction.utility.js';
 import { GetOneServiceBasedOnServiceCode } from '../utilities/service.utility.js';
 
 /**
- * Function to handle top-up balance for a user.
+ * Top up the balance for a user.
  *
- * This function validates the top-up amount, retrieves the user based on the provided email,
- * updates the user's balance, generates a transaction history, and returns the updated balance.
+ * This function handles the process of topping up a user's balance. It validates the top-up amount,
+ * retrieves the user data based on the provided email, and updates the user's balance. It also
+ * creates a transaction history record for the top-up.
  *
  * @async
- * @function TopUpBalanceForUser
- * @param {Object} params - Parameters required for the top-up process.
- * @param {number} params.top_up_amount - The amount to be added to the user's balance.
- *   Must be a positive number.
- * @param {string} params.email - The email address of the user whose balance will be updated.
- * @returns {Promise<Object>} A promise that resolves to an object containing:
- *   - `status` {number} - Status code (0 for success).
- *   - `message` {string} - Success message ('Top Up Balance berhasil').
- *   - `data` {Object} - An object containing:
- *     - `balance` {number} - The updated balance of the user.
+ * @function
  *
- * @throws {Error} If an error occurs during the process:
- *   - Throws a 400 error if the top-up amount is invalid or the user does not exist.
- *   - Logs the error and rethrows it for handling by higher-level functions.
+ * @param {Object} params - The function parameters.
+ * @param {number} params.top_up_amount - The amount to top up the user's balance.
+ * @param {string} params.email - The user's email address used to identify the user.
+ *
+ * @returns {Promise<Object>} A promise that resolves to an object containing the status, message, and the updated user balance.
+ *
+ * @throws {Error} Throws an error if any validation fails, the user is not found, or the update fails.
+ *
+ * @example
+ * const result = await TopUpBalanceForUser({
+ *   top_up_amount: 50000,
+ *   email: 'user@example.com',
+ * });
+ * console.log(result);
+ * // Example response:
+ * // {
+ * //   status: 0,
+ * //   message: 'Top Up Balance berhasil',
+ * //   data: {
+ * //     balance: 100000,
+ * //   }
+ * // }
  */
 
 async function TopUpBalanceForUser({ top_up_amount, email }) {
@@ -96,22 +107,44 @@ async function TopUpBalanceForUser({ top_up_amount, email }) {
 }
 
 /**
- * Create a transaction for a user based on a service code.
+ * Create a transaction for a user by processing a payment.
  *
- * This function verifies the user's existence, retrieves the requested service, checks for sufficient balance,
- * deducts the service tariff from the user's balance, and logs the transaction in the history.
+ * This function handles the creation of a transaction for a user. It checks the user's balance,
+ * retrieves the corresponding service based on the service code, and processes the payment if the
+ * balance is sufficient. It also updates the user's balance and creates a transaction history record.
  *
  * @async
- * @function CreateTransaction
- * @param {Object} params - The parameters for the transaction.
- * @param {string} params.service_code - The unique code for the requested service.
- * @param {string} params.email - The email of the user initiating the transaction.
- * @returns {Object} An object containing the transaction details and updated balance.
+ * @function
  *
- * @throws {Error} Throws an error if:
- * - The user is not found (status 400).
- * - The service is not found (status 400).
- * - The user's balance is insufficient (status 400).
+ * @param {Object} params - The function parameters.
+ * @param {string} params.service_code - The code of the service the user is paying for.
+ * @param {string} params.email - The user's email address used to identify the user.
+ *
+ * @returns {Promise<Object>} A promise that resolves to an object containing the status, message,
+ * and the details of the created transaction.
+ *
+ * @throws {Error} Throws an error if any validation fails, the user is not found, the service does
+ * not exist, or the user has insufficient balance.
+ *
+ * @example
+ * const result = await CreateTransaction({
+ *   service_code: 'SERVICE123',
+ *   email: 'user@example.com',
+ * });
+ * console.log(result);
+ * // Example response:
+ * // {
+ * //   status: 0,
+ * //   message: 'Transaksi berhasil',
+ * //   data: {
+ * //     invoice_number: 'INV12345',
+ * //     service_code: 'SERVICE123',
+ * //     service_name: 'Premium Service',
+ * //     transaction_type: 'PAYMENT',
+ * //     total_amount: 5000,
+ * //     created_on: '2024-12-10T00:00:00Z',
+ * //   }
+ * // }
  */
 
 async function CreateTransaction({ service_code, email }) {
