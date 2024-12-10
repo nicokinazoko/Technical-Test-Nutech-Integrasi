@@ -1,6 +1,6 @@
 import UserModel from '../models/user.model.js';
 
-async function CheckExistingUser(email) {
+async function CheckExistingUser({ email }) {
   if (!email) throw new Error('parameter email is required');
 
   const checkExistingUser = await UserModel.findOne({
@@ -8,11 +8,7 @@ async function CheckExistingUser(email) {
   }).lean();
 
   if (checkExistingUser) {
-    return {
-      status: 102,
-      message: `Email sudah terdaftar, silahkan input email yang lain`,
-      data: null,
-    };
+    throw new Error('Email sudah terdaftar, silahkan input email yang lain');
   }
 
   return checkExistingUser;
