@@ -28,11 +28,20 @@ async function GetAllBannersController(req, res) {
     console.error('Error in GetAllBannersController:', error);
 
     // return error to api
-    res.status(500).json({
-      status: 102,
-      message: 'Failed to retrieve banners',
-      data: null,
-    });
+    if (error.status === 400) {
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
   }
 }
 
