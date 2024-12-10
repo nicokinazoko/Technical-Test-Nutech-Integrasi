@@ -1,4 +1,4 @@
-import ServiceModel from '../models/service.model.js';
+import { GenerateQueryMongoDB } from '../utilities/common.utility.js';
 
 /**
  * Function to retrieve a service based on its unique service code.
@@ -18,8 +18,13 @@ import ServiceModel from '../models/service.model.js';
  */
 
 async function GetOneServiceBasedOnServiceCode({ service_code }) {
+  const parameterQuery = { service_code };
   // find service based on service code
-  const service = await ServiceModel.findOne({ service_code }).lean();
+  const service = await GenerateQueryMongoDB({
+    collection_name: 'services',
+    query: 'findOne',
+    parameter: parameterQuery,
+  });
 
   // return service
   return service;
