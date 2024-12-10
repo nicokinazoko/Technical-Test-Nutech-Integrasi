@@ -8,7 +8,11 @@ async function CheckExistingUser({ email }) {
   }).lean();
 
   if (checkExistingUser) {
-    throw new Error('Email sudah terdaftar, silahkan input email yang lain');
+    const error = new Error(
+      'Email sudah terdaftar, silahkan input email yang lain'
+    );
+    error.status = 400;
+    throw error;
   }
 
   return checkExistingUser;

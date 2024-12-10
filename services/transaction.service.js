@@ -73,7 +73,9 @@ async function CreateTransaction({ service_code, token }) {
   if (!service) return null;
 
   if (!user?.balance || user.balance < service.service_tariff) {
-    throw new Error('Balance tidak cukup');
+    const error = new Error('Balance tidak cukup');
+    error.status = 400;
+    throw error;
   }
 
   const updatedBalance = (user?.balance || 0) - service.service_tariff;

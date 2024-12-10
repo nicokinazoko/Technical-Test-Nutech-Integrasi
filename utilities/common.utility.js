@@ -57,7 +57,9 @@ async function ValidateEmail({ email }) {
   // check if email is valid using regex based on declaration
   if (!emailRegex.test(email)) {
     // if email not valid, then throw an error
-    throw new Error('Parameter email tidak sesuai format');
+    const error = new Error('Parameter email tidak sesuai format');
+    error.status = 400;
+    throw error;
   }
 }
 
@@ -76,7 +78,9 @@ async function ValidateEmail({ email }) {
 async function ValidatePassword({ password }) {
   // if password is not exist and password is not long than 8 charaters, return error
   if (!password || password?.length < 8) {
-    throw new Error('Parameter password tidak sesuai format');
+    const error = new Error('Parameter password tidak sesuai format');
+    error.status = 400;
+    throw error;
   }
 }
 
@@ -96,7 +100,9 @@ async function ValidatePassword({ password }) {
 async function ValidateRequiredInput({ value, field_name = 'input' }) {
   // if value is empty, then throw error with field name
   if (!value) {
-    throw new Error(`Parameter ${field_name} tidak boleh kosong`);
+    const error = new Error(`Parameter ${field_name} tidak boleh kosong`);
+    error.status = 400;
+    throw error;
   }
 }
 
