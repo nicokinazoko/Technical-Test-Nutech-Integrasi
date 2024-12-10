@@ -164,13 +164,13 @@ async function UploadSingleFile({ file }) {
 /**
  * Generates a UUID (Universally Unique Identifier) version 4.
  *
- * This function creates a random UUID in the format `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`, 
+ * This function creates a random UUID in the format `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`,
  * where `x` represents random hexadecimal digits, and `y` is a value from 8, 9, A, or B.
- * 
+ *
  * @function
- * 
+ *
  * @returns {string} A randomly generated UUID string.
- * 
+ *
  * @example
  * const uuid = generateUUID();
  * console.log(uuid); // Example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
@@ -187,13 +187,13 @@ function generateUUID() {
 /**
  * Executes various MongoDB queries with support for create, find, update, and other operations.
  *
- * This function is a dynamic MongoDB query handler designed to support multiple operations such as 
- * creating documents, finding documents with filters and pagination, updating documents, and finding 
+ * This function is a dynamic MongoDB query handler designed to support multiple operations such as
+ * creating documents, finding documents with filters and pagination, updating documents, and finding
  * and updating a document by ID.
- * 
+ *
  * @async
  * @function
- * 
+ *
  * @param {Object} params - The input parameters for the query.
  * @param {string} params.collection_name - The name of the MongoDB collection to query.
  * @param {string} params.query - The type of query to execute (e.g., 'create', 'find', 'update', etc.).
@@ -203,16 +203,16 @@ function generateUUID() {
  * @param {Object} [params.pagination] - The pagination details for 'find' queries.
  * @param {number} [params.pagination.offset] - The page offset for pagination.
  * @param {number} [params.pagination.limit] - The number of documents to return per page.
- * 
+ *
  * @returns {Object|Array} The result of the query, which may vary depending on the operation type:
  * - 'create': The inserted document details.
  * - 'find': An array of matching documents.
  * - 'update': The update operation's result.
  * - 'findByIdAndUpdate': The updated document.
  * - 'findOne': The single matching document.
- * 
+ *
  * @throws {Error} Throws an error if the query type is unsupported or if the query fails.
- * 
+ *
  * @example
  * // Create a new document
  * const result = await GenerateQueryMongoDB({
@@ -220,7 +220,7 @@ function generateUUID() {
  *   query: 'create',
  *   data: { name: 'John Doe', age: 30 },
  * });
- * 
+ *
  * // Find documents with sorting and pagination
  * const result = await GenerateQueryMongoDB({
  *   collection_name: 'users',
@@ -229,7 +229,7 @@ function generateUUID() {
  *   sort: { createdAt: -1 },
  *   pagination: { offset: 0, limit: 10 },
  * });
- * 
+ *
  * // Update a document
  * const result = await GenerateQueryMongoDB({
  *   collection_name: 'users',
