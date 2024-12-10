@@ -1,4 +1,5 @@
 import express from 'express';
+
 import VerifyJWTToken from '../middleware/authMiddleware.js';
 import {
   RegisterMembershipController,
@@ -23,8 +24,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
-// const upload = multer({ dest: 'uploads/' });
 
 router.post('/registration', RegisterMembershipController);
 router.post('/login', LoginController);
