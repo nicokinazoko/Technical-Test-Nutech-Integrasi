@@ -1,11 +1,17 @@
-import UserModel from '../models/user.model.js';
+import { GenerateQueryMongoDB } from '../utilities/common.utility.js';
 
 async function CheckExistingUser({ email }) {
   if (!email) throw new Error('parameter email is required');
 
-  const checkExistingUser = await UserModel.findOne({
-    email: email.trim(),
-  }).lean();
+  const parameterQuery = { email: email.trim() };
+
+  const queryBuilder = GenerateQueryMongoDB({
+    collection_name: 'users',
+    query: 'findOne',
+    parameter: parameterQuery,
+  });
+
+  const checkExistingUser = await queryBuilder;
 
   if (checkExistingUser) {
     const error = new Error(
@@ -22,7 +28,16 @@ async function GetOneUserBasedOnEmail({ email }) {
   if (!email) {
     throw new Error('Email is required');
   }
-  const user = await UserModel.findOne({ email }).lean();
+  const parameterQuery = { email: email.trim() };
+
+  const queryBuilder = GenerateQueryMongoDB({
+    collection_name: 'users',
+    query: 'findOne',
+    parameter: parameterQuery,
+  });
+
+  const user = await queryBuilder;
+  // const user = await UserModel.findOne({ email }).lean();
 
   return user;
 }
