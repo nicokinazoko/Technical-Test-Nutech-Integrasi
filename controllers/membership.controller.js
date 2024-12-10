@@ -2,6 +2,7 @@ import {
   CreateUser,
   GetOneProfileBasedOnEmail,
   UpdateUserBasedEmail,
+  UpdateProfileUserBasedOnEmail,
 } from '../services/user.service.js';
 
 import {
@@ -255,9 +256,94 @@ async function UpdateMemberController(req, res) {
   }
 }
 
+/**
+ * Controller to handle the update of a user's profile image.
+ *
+ * This function handles the HTTP request to update the profile image of a user. It expects a valid user
+ * object in the request (populated by middleware) and a file object for the new profile image.
+ * It updates the user's profile image in the database and returns the updated user data.
+ *
+ * @async
+ * @function
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} req.user - The authenticated user data from the middleware (e.g., email).
+ * @param {Object} req.file - The file object containing the uploaded profile image.
+ * @param {string} req.user.email - The user's email, used to identify the user for updating.
+ * @param {Object} req.file - The uploaded file containing the new profile image.
+ *
+ * @param {Object} res - The HTTP response object used to send a response back to the client.
+ * @param {Function} res.status - Method to set the status code of the response.
+ * @param {Function} res.json - Method to send a JSON response with data.
+ *
+ * @returns {Object} Returns a JSON response with status and the updated user profile information.
+ *
+ * @throws {Error} Throws an error if the update fails or if an invalid request is made.
+ *
+ * @example
+ * // Request:
+ * // POST /update-profile-image
+ * // Request body: { file: <image file> }
+ *
+ * // Success response:
+ * {
+ *   status: 0,
+ *   message: 'Update Profile Image berhasil',
+ *   data: {
+ *     email: 'user@example.com',
+ *     first_name: 'John',
+ *     last_name: 'Doe',
+ *     profile_image: 'https://cloudinary.url/profile_image.jpg',
+ *   }
+ * }
+ *
+ * // Error response:
+ * {
+ *   status: 102,
+ *   message: 'Format Image tidak sesuai',
+ *   data: null
+ * }
+ */
+
+async function UpdateProfileImageController(req, res) {
+  try {
+    // get data user from middleware
+    const { email } = req.user;
+
+    // get file
+    const file = req.file;
+
+    // call function to update profile image
+    const resultUpdateProfile = await UpdateProfileUserBasedOnEmail({
+      email,
+      file,
+    });
+
+    // return result from update profile image
+    return res.status(200).json(resultUpdateProfile);
+  } catch (error) {
+    if (error.status === 400) {
+      // return error to api
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
+  }
+}
+
 export {
   RegisterMembershipController,
   LoginController,
   GetOneProfileController,
   UpdateMemberController,
+  UpdateProfileImageController,
 };

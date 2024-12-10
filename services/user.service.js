@@ -2,10 +2,10 @@ import UserModel from '../models/user.model.js';
 import {
   CreateSalt,
   GenerateHashedPassword,
+  UploadSingleFile,
 } from '../utilities/common.utility.js';
 
 import { GetOneUserBasedOnEmail } from '../utilities/user.utitlity.js';
-import { GetEmailFromToken } from '../utilities/login.utility.js';
 
 /**
  * Creates a new user in the system.
@@ -212,9 +212,58 @@ async function UpdateUserBasedEmail({ email, first_name, last_name }) {
   }
 }
 
+/**
+ * Update the profile image of a user based on their email.
+ *
+ * This function first finds the user by email, uploads a profile image to Cloudinary,
+ * and then updates the user's profile with the new image URL.
+ *
+ * @async
+ * @function UpdateProfileUserBasedOnEmail
+ * @param {Object} params - The parameters for updating the user's profile.
+ * @param {string} params.email - The email of the user whose profile is to be updated.
+ * @param {Object} params.file - The image file to upload.
+ * @returns {Object} The response object containing the update status and user data.
+ *
+ * @throws {Error} Throws an error if:
+ * - The user is not found.
+ * - Any other error occurs during the file upload or profile update process.
+ */
+async function UpdateProfileUserBasedOnEmail({ email, file }) {
+  try {
+    const user = await GetOneUserBasedOnEmail({ email: email });
+
+    // Upload to Cloudinary
+    const uploadResult = await UploadSingleFile({ file });
+
+    const updateProfileUser = await UserModel.findByIdAndUpdate(user._id, {
+      $set: {
+        profile_image: uploadResult?.secure_url,
+      },
+    });
+
+    return {
+      status: 0,
+      message: 'Update Profile Image berhasil',
+      data: {
+        email: updateProfileUser?.email || '',
+        first_name: updateProfileUser.first_name || '',
+        last_name: updateProfileUser?.last_name || '',
+        profile_image: uploadResult?.secure_url,
+      },
+    };
+  } catch (error) {
+    // log the error
+    console.log(error);
+
+    throw new Error(error.message);
+  }
+}
+
 export {
   CreateUser,
   GetOneUserBalanceBasedOnEmail,
   GetOneProfileBasedOnEmail,
   UpdateUserBasedEmail,
+  UpdateProfileUserBasedOnEmail,
 };
