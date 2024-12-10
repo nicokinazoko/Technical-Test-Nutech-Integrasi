@@ -103,6 +103,51 @@ async function GetOneUserBalanceBasedonToken({ token }) {
   };
 }
 
+/**
+ * Retrieves the profile information of a user based on their email.
+ *
+ * This function calls `GetOneUserBasedOnEmail` to fetch the user's data using the provided email,
+ * and returns the user's email, first name, last name, and profile image. If any of the values are missing,
+ * empty strings are returned instead. If an error occurs during the process, it logs the error and throws it.
+ *
+ * @async
+ * @function GetOneProfileBasedOnEmail
+ * @param {Object} emailDetails - An object containing the email to fetch the profile.
+ * @param {string} emailDetails.email - The email address of the user whose profile is to be fetched.
+ * @returns {Promise<Object>} A promise that resolves to an object containing:
+ *   - `status` {number} - A status code indicating success (0 for success).
+ *   - `message` {string} - A message indicating the outcome (e.g., 'Sukses').
+ *   - `data` {Object} - An object containing the user's profile data:
+ *     - `email` {string} - The user's email.
+ *     - `first_name` {string} - The user's first name.
+ *     - `last_name` {string} - The user's last name.
+ *     - `profile_image` {string} - The user's profile image URL.
+ * 
+ * @throws {Error} Throws an error if the profile retrieval fails.
+ */
+
+async function GetOneProfileBasedOnEmail({ email }) {
+  try {
+    const user = await GetOneUserBasedOnEmail({ email: email });
+
+    return {
+      status: 0,
+      message: 'Sukses',
+      data: {
+        email: user?.email || '',
+        first_name: user?.first_name || '',
+        last_name: user?.last_name || '',
+        profile_image: user?.profile_image || '',
+      },
+    };
+  } catch (error) {
+    // log the error
+    console.log(error);
+
+    throw new Error(error.message);
+  }
+}
+
 async function UpdateUserBasedOnToken({ token, first_name, last_name }) {
   const emailFromToken = await GetEmailFromToken({ tokenData: token });
   const updateData = {};
@@ -152,4 +197,5 @@ export {
   GetOneUserBasedOnToken,
   GetOneUserBalanceBasedonToken,
   UpdateUserBasedOnToken,
+  GetOneProfileBasedOnEmail,
 };
