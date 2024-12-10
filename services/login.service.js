@@ -14,25 +14,7 @@ import {
   GetOneUserBasedOnEmail,
 } from '../utilities/user.utitlity.js';
 
-async function Login(email, password) {
-  const emailValidation = await ValidateEmail({
-    email,
-  });
-
-  if (emailValidation) return emailValidation;
-
-  const passwordValidation = await ValidatePassword({
-    password,
-  });
-
-  if (passwordValidation) return passwordValidation;
-
-  const checkExistingUser = await CheckExistingUser(email);
-
-  if (!checkExistingUser) {
-    throw new Error('Email not exist');
-  }
-
+async function Login({ email, password }) {
   const user = await GetOneUserBasedOnEmail({ email });
   if (!user || (user && !user.email)) throw new Error('User is not exist');
 
@@ -41,12 +23,11 @@ async function Login(email, password) {
     user,
   });
 
-  if (!passwordMatch)
-    return {
-      status: 103,
-      message: 'Username atau password salah',
-      data: null,
-    };
+  if (!passwordMatch) {
+    const error = new Error('Username atau password salah');
+    error.status = 401;
+    throw error;
+  }
 
   const tokenData = {
     email: user.email,
