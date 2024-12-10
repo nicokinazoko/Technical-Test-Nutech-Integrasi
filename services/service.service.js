@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 import ServiceModel from '../models/service.model.js';
 
 async function GetAllServices() {
