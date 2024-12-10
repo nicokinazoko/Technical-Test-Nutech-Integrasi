@@ -1,4 +1,4 @@
-import UserModel from '../models/user.model.js';
+import { GenerateQueryMongoDB } from '../utilities/common.utility.js';
 import {
   CreateSalt,
   GenerateHashedPassword,
@@ -48,7 +48,11 @@ async function CreateUser({ email, first_name, last_name, password }) {
     };
 
     // create data user
-    await UserModel.create(inputDataUser);
+    await GenerateQueryMongoDB({
+      collection_name: 'users',
+      query: 'create',
+      data: inputDataUser,
+    });
 
     // return data user
     return {
@@ -184,15 +188,13 @@ async function UpdateUserBasedEmail({ email, first_name, last_name }) {
       updateData.last_name = last_name;
     }
 
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      user._id,
-      {
-        $set: updateData,
-      },
-      {
-        new: true,
-      }
-    );
+    const parameterQuery = { _id: user._id };
+    const updatedUser = await GenerateQueryMongoDB({
+      collection_name: 'users',
+      query: 'findByIdAndUpdate',
+      parameter: parameterQuery,
+      data: updateData,
+    });
 
     return {
       status: 0,
@@ -236,10 +238,18 @@ async function UpdateProfileUserBasedOnEmail({ email, file }) {
     // Upload to Cloudinary
     const uploadResult = await UploadSingleFile({ file });
 
-    const updateProfileUser = await UserModel.findByIdAndUpdate(user._id, {
-      $set: {
-        profile_image: uploadResult?.secure_url,
-      },
+    // const updateProfileUser = await UserModel.findByIdAndUpdate(user._id, {
+    //   $set: {
+    //     profile_image: uploadResult?.secure_url,
+    //   },
+    // });
+    const updateData = { profile_image: uploadResult?.secure_url };
+    const parameterQuery = { _id: user._id };
+    const updateProfileUser = await GenerateQueryMongoDB({
+      collection_name: 'users',
+      query: 'findByIdAndUpdate',
+      parameter: parameterQuery,
+      data: updateData,
     });
 
     return {
