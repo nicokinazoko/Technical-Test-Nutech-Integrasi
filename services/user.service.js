@@ -122,7 +122,7 @@ async function GetOneUserBalanceBasedonToken({ token }) {
  *     - `first_name` {string} - The user's first name.
  *     - `last_name` {string} - The user's last name.
  *     - `profile_image` {string} - The user's profile image URL.
- * 
+ *
  * @throws {Error} Throws an error if the profile retrieval fails.
  */
 
@@ -148,54 +148,79 @@ async function GetOneProfileBasedOnEmail({ email }) {
   }
 }
 
-async function UpdateUserBasedOnToken({ token, first_name, last_name }) {
-  const emailFromToken = await GetEmailFromToken({ tokenData: token });
-  const updateData = {};
+/**
+ * Updates a user's profile based on their email.
+ *
+ * This function retrieves the user by email using `GetOneUserBasedOnEmail`,
+ * then updates the user's first name and/or last name if provided in the input.
+ * It calls the `UserModel.findByIdAndUpdate` method to apply the changes to the user's record
+ * and returns the updated user profile data. If an error occurs during the process,
+ * it logs the error and throws it.
+ *
+ * @async
+ * @function UpdateUserBasedEmail
+ * @param {Object} userDetails - An object containing the user's details.
+ * @param {string} userDetails.email - The email of the user to update.
+ * @param {string} [userDetails.first_name] - The new first name of the user (optional).
+ * @param {string} [userDetails.last_name] - The new last name of the user (optional).
+ * @returns {Promise<Object>} A promise that resolves to an object containing:
+ *   - `status` {number} - A status code indicating success (0 for success).
+ *   - `message` {string} - A message indicating the outcome (e.g., 'Update Profile berhasil').
+ *   - `data` {Object} - An object containing the updated user profile data:
+ *     - `email` {string} - The user's email.
+ *     - `first_name` {string} - The user's first name.
+ *     - `last_name` {string} - The user's last name.
+ *     - `profile_image` {string} - The user's profile image URL.
+ *
+ * @throws {Error} Throws an error if the profile update fails or if the user is not found.
+ */
 
-  if (!emailFromToken) {
-    return null;
-  }
+async function UpdateUserBasedEmail({ email, first_name, last_name }) {
+  try {
+    const updateData = {};
 
-  const user = await GetOneUserBasedOnEmail({ email: emailFromToken });
+    const user = await GetOneUserBasedOnEmail({ email: email });
 
-  if (!user) {
-    return null;
-  }
-
-  if (first_name) {
-    updateData.first_name = first_name;
-  }
-
-  if (last_name) {
-    updateData.last_name = last_name;
-  }
-
-  const updatedUser = await UserModel.findByIdAndUpdate(
-    user._id,
-    {
-      $set: updateData,
-    },
-    {
-      new: true,
+    if (first_name) {
+      updateData.first_name = first_name;
     }
-  );
 
-  return {
-    status: 0,
-    message: 'Update Pofile berhasil',
-    data: {
-      email: updatedUser?.email || '',
-      first_name: user?.first_name || '',
-      last_name: user?.last_name || '',
-      profile_image: updatedUser?.profile_image,
-    },
-  };
+    if (last_name) {
+      updateData.last_name = last_name;
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      user._id,
+      {
+        $set: updateData,
+      },
+      {
+        new: true,
+      }
+    );
+
+    return {
+      status: 0,
+      message: 'Update Pofile berhasil',
+      data: {
+        email: updatedUser?.email || '',
+        first_name: updatedUser?.first_name || '',
+        last_name: updatedUser?.last_name || '',
+        profile_image: updatedUser?.profile_image,
+      },
+    };
+  } catch (error) {
+    // log the error
+    console.log(error);
+
+    throw new Error(error.message);
+  }
 }
 
 export {
   CreateUser,
   GetOneUserBasedOnToken,
   GetOneUserBalanceBasedonToken,
-  UpdateUserBasedOnToken,
   GetOneProfileBasedOnEmail,
+  UpdateUserBasedEmail,
 };
