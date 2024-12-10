@@ -64,45 +64,6 @@ async function CreateUser({ email, first_name, last_name, password }) {
   }
 }
 
-async function GetOneUserBasedOnToken({ token }) {
-  const emailFromToken = await GetEmailFromToken({ tokenData: token });
-
-  if (!emailFromToken) {
-    return null;
-  }
-
-  const user = await GetOneUserBasedOnEmail({ email: emailFromToken });
-
-  return {
-    status: 0,
-    message: 'Sukses',
-    data: {
-      email: user?.email || '',
-      first_name: user?.first_name || '',
-      last_name: user?.last_name || '',
-      profile_image: user?.profile_image || '',
-    },
-  };
-}
-
-async function GetOneUserBalanceBasedonToken({ token }) {
-  const emailFromToken = await GetEmailFromToken({ tokenData: token });
-
-  if (!emailFromToken) {
-    return null;
-  }
-
-  const user = await GetOneUserBasedOnEmail({ email: emailFromToken });
-
-  return {
-    status: 0,
-    message: 'Get Balance Berhasil',
-    data: {
-      balance: user?.balance || 0,
-    },
-  };
-}
-
 /**
  * Retrieves the profile information of a user based on their email.
  *
@@ -146,6 +107,40 @@ async function GetOneProfileBasedOnEmail({ email }) {
 
     throw new Error(error.message);
   }
+}
+
+/**
+ * Retrieves the balance of a user based on their email.
+ *
+ * This function fetches the user's data using the `GetOneUserBasedOnEmail` function
+ * and returns the user's balance. If the user is not found or their balance is missing,
+ * the balance defaults to 0.
+ *
+ * @async
+ * @function GetOneUserBalanceBasedOnEmail
+ * @param {Object} userDetails - An object containing the email of the user.
+ * @param {string} userDetails.email - The email address of the user whose balance is to be retrieved.
+ * @returns {Promise<Object>} A promise that resolves to an object containing:
+ *   - `status` {number} - A status code indicating success (0 for success).
+ *   - `message` {string} - A message indicating the outcome (e.g., 'Get Balance Berhasil').
+ *   - `data` {Object} - An object containing the user's balance:
+ *     - `balance` {number} - The user's balance (defaults to 0 if not found).
+ *
+ * @throws {Error} If there is an issue retrieving the user's data or balance, it will throw an error.
+ */
+
+async function GetOneUserBalanceBasedOnEmail({ email }) {
+  // call function to get user based on email
+  const user = await GetOneUserBasedOnEmail({ email });
+
+  // return balance user
+  return {
+    status: 0,
+    message: 'Get Balance Berhasil',
+    data: {
+      balance: user?.balance || 0,
+    },
+  };
 }
 
 /**
@@ -219,8 +214,7 @@ async function UpdateUserBasedEmail({ email, first_name, last_name }) {
 
 export {
   CreateUser,
-  GetOneUserBasedOnToken,
-  GetOneUserBalanceBasedonToken,
+  GetOneUserBalanceBasedOnEmail,
   GetOneProfileBasedOnEmail,
   UpdateUserBasedEmail,
 };
