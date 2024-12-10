@@ -1,6 +1,9 @@
 import { GetOneUserBalanceBasedOnEmail } from '../services/user.service.js';
 import { GetAllTransactionHistories } from '../services/transaction_history.service.js';
-import { TopUpBalanceForUser } from '../services/transaction.service.js';
+import {
+  TopUpBalanceForUser,
+  CreateTransaction,
+} from '../services/transaction.service.js';
 
 /**
  * Controller function to retrieve a user's balance.
@@ -146,8 +149,69 @@ async function TopUpBalanceForUserController(req, res) {
   }
 }
 
+/**
+ * Controller to handle transaction creation for a user.
+ *
+ * This function processes a request to create a transaction for a specific service.
+ * It retrieves the user's email from the authentication middleware and the service code
+ * from the request body, then calls the `CreateTransaction` function to perform the operation.
+ *
+ * @async
+ * @function CreateTransactionForUserController
+ * @param {Object} req - The request object from the client.
+ * @param {Object} req.user - The user object populated by middleware, containing the user's email.
+ * @param {string} req.user.email - The email of the authenticated user.
+ * @param {Object} req.body - The body of the HTTP request.
+ * @param {string} req.body.service_code - The unique service code for the transaction.
+ * @param {Object} res - The response object to send the results.
+ * @returns {void} Sends an HTTP response containing the result of the transaction creation or an error message.
+ *
+ * @example
+ * // Example request body
+ * // POST /create-transaction
+ * {
+ *   "service_code": "SVC123"
+ * }
+ *
+ * @throws {Error} Returns an HTTP 400 status with an error message for client-side errors,
+ * or a 500 status for server-side errors.
+ */
+
+async function CreateTransactionForUserController(req, res) {
+  try {
+    const { email } = req.user;
+    const { service_code } = req.body;
+    const resultCreateTransaction = await CreateTransaction({
+      service_code,
+      email,
+    });
+
+    res.status(200).json(resultCreateTransaction);
+  } catch (error) {
+    // log the error
+    console.error('Error in CreateTransactionForUserController:', error);
+
+    // return error to api
+    if (error.status === 400) {
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
+  }
+}
+
 export {
   GetBalanceFromUserController,
   GetTransactionHistoriesContrroller,
   TopUpBalanceForUserController,
+  CreateTransactionForUserController,
 };
