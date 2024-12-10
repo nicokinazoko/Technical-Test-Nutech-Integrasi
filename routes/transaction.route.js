@@ -5,6 +5,7 @@ import VerifyJWTToken from '../middleware/authMiddleware.js';
 import {
   GetBalanceFromUserController,
   GetTransactionHistoriesContrroller,
+  TopUpBalanceForUserController,
 } from '../controllers/transaction.controller.js';
 
 const router = express.Router();
@@ -15,4 +16,6 @@ router.get(
   VerifyJWTToken,
   GetTransactionHistoriesContrroller
 );
+
+router.post('/topup', VerifyJWTToken, TopUpBalanceForUserController);
 export default router;

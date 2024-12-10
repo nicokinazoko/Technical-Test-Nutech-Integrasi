@@ -1,5 +1,6 @@
 import { GetOneUserBalanceBasedOnEmail } from '../services/user.service.js';
 import { GetAllTransactionHistories } from '../services/transaction_history.service.js';
+import { TopUpBalanceForUser } from '../services/transaction.service.js';
 
 /**
  * Controller function to retrieve a user's balance.
@@ -87,4 +88,66 @@ async function GetTransactionHistoriesContrroller(req, res) {
   }
 }
 
-export { GetBalanceFromUserController, GetTransactionHistoriesContrroller };
+/**
+ * Controller function to handle top-up balance requests for a user.
+ *
+ * This function extracts the top-up amount from the request body and the user's email
+ * from the middleware. It calls the `TopUpBalanceForUser` function to process the balance
+ * update and returns the result. If an error occurs, an appropriate error message is sent.
+ *
+ * @async
+ * @function TopUpBalanceForUserController
+ * @param {Object} req - The request object containing:
+ *   - `body` {Object} - The request body with the `top_up_amount` parameter.
+ *   - `user` {Object} - The user object injected by middleware, containing the user's email.
+ * @param {Object} res - The response object used to send the API response.
+ * @returns {Promise<void>} A promise that resolves when the response is sent.
+ *
+ * @throws {Error} If the top-up process fails:
+ *   - Sends a 400 status response for client-side errors (e.g., invalid input).
+ *   - Sends a 500 status response for server-side errors.
+ */
+
+async function TopUpBalanceForUserController(req, res) {
+  try {
+    // get data top up amount from body
+    const { top_up_amount } = req.body;
+
+    // get data email from user
+    const { email } = req.user;
+
+    // call function to calculate balance for top up
+    const resultTopUpBalance = await TopUpBalanceForUser({
+      email,
+      top_up_amount,
+    });
+
+    // return response
+    res.status(200).json(resultTopUpBalance);
+  } catch (error) {
+    // log the error
+    console.error('Error in TopUpBalanceForUserController:', error);
+
+    // return error to api
+    if (error.status === 400) {
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
+  }
+}
+
+export {
+  GetBalanceFromUserController,
+  GetTransactionHistoriesContrroller,
+  TopUpBalanceForUserController,
+};
