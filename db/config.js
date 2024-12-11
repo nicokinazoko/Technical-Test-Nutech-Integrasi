@@ -3,9 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: '.env-dev' });
 
+// Construct the correct MongoDB connection URL
 const url =
   process.env.SERVER_ENV === 'railway'
-    ? `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.MONGO_PUBLIC_URL}/${process.env.DB_NAME}?authSource=admin`
+    ? `${process.env.MONGO_PUBLIC_URL}/${process.env.DB_NAME}?authSource=admin`
     : `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`;
 console.log('MongoDB Connection URL:', url);
 
