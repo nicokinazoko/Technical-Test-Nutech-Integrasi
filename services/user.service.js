@@ -60,6 +60,7 @@ async function CreateUser({ email, first_name, last_name, password }) {
       last_name: last_name ? last_name.trim().toLowerCase() : '',
       salt,
       hashed_password: hashedPassword,
+      status: 'active',
     };
 
     // create data user

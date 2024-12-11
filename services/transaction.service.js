@@ -81,6 +81,7 @@ async function TopUpBalanceForUser({ top_up_amount, email }) {
       transaction_type: 'TOPUP',
       total_amount: top_up_amount,
       user_id: user._id,
+      status: 'active',
     };
 
     // create transaction history for topup
@@ -201,6 +202,7 @@ async function CreateTransaction({ service_code, email }) {
     user_id: user._id,
     service_id: service._id,
     createdAt: dateCreated,
+    status: 'active',
   };
 
   // create data transaction history
