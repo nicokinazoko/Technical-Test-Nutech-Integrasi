@@ -57,6 +57,7 @@ async function RegisterMembershipController(req, res) {
       password,
     });
 
+    console.log('check before update');
     // end section validate input
 
     // call function to create user
@@ -66,6 +67,7 @@ async function RegisterMembershipController(req, res) {
       last_name,
       password,
     });
+    console.log('check after update');
 
     return res.status(200).json(resultCreateUser);
   } catch (error) {
