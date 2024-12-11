@@ -1,0 +1,65 @@
+db.banners.insert([/* 1 createdAt:12/9/2024, 10:40:33 AM*/
+    {
+        "_id": ObjectId("675666b107c8112300ced566"),
+        "banner_name": "Banner 6",
+        "banner_image": "https://nutech-integrasi.app/dummy.jpg",
+        "description": "Lerem Ipsum Dolor sit amet",
+        "status": "active",
+        "createdAt": { "$date": "2024-12-11T00:00:00Z" },
+        "updatedAt": { "$date": "2024-12-11T00:00:00Z" }
+    },
+
+    /* 2 createdAt:12/9/2024, 10:40:33 AM*/
+    {
+        "_id": ObjectId("675666b107c8112300ced565"),
+        "banner_name": "Banner 5",
+        "banner_image": "https://nutech-integrasi.app/dummy.jpg",
+        "description": "Lerem Ipsum Dolor sit amet",
+        "status": "active",
+        "createdAt": { "$date": "2024-12-11T00:00:00Z" },
+        "updatedAt": { "$date": "2024-12-11T00:00:00Z" }
+    },
+
+    /* 3 createdAt:12/9/2024, 10:40:33 AM*/
+    {
+        "_id": ObjectId("675666b107c8112300ced564"),
+        "banner_name": "Banner 4",
+        "banner_image": "https://nutech-integrasi.app/dummy.jpg",
+        "description": "Lerem Ipsum Dolor sit amet",
+        "status": "active",
+        "createdAt": { "$date": "2024-12-11T00:00:00Z" },
+        "updatedAt": { "$date": "2024-12-11T00:00:00Z" }
+    },
+
+    /* 4 createdAt:12/9/2024, 10:40:33 AM*/
+    {
+        "_id": ObjectId("675666b107c8112300ced563"),
+        "banner_name": "Banner 3",
+        "banner_image": "https://nutech-integrasi.app/dummy.jpg",
+        "description": "Lerem Ipsum Dolor sit amet",
+        "status": "active",
+        "createdAt": { "$date": "2024-12-11T00:00:00Z" },
+        "updatedAt": { "$date": "2024-12-11T00:00:00Z" }
+    },
+
+    /* 5 createdAt:12/9/2024, 10:40:33 AM*/
+    {
+        "_id": ObjectId("675666b107c8112300ced562"),
+        "banner_name": "Banner 2",
+        "banner_image": "https://nutech-integrasi.app/dummy.jpg",
+        "description": "Lerem Ipsum Dolor sit amet",
+        "status": "active",
+        "createdAt": { "$date": "2024-12-11T00:00:00Z" },
+        "updatedAt": { "$date": "2024-12-11T00:00:00Z" }
+    },
+
+    /* 6 createdAt:12/9/2024, 10:40:33 AM*/
+    {
+        "_id": ObjectId("675666b107c8112300ced561"),
+        "banner_name": "Banner 1",
+        "banner_image": "https://nutech-integrasi.app/dummy.jpg",
+        "description": "Lerem Ipsum Dolor sit amet",
+        "status": "active",
+        "createdAt": { "$date": "2024-12-11T00:00:00Z" },
+        "updatedAt": { "$date": "2024-12-11T00:00:00Z" }
+    }])

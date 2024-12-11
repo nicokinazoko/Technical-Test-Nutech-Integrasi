@@ -1,0 +1,144 @@
+db.services.insert(
+    [/* 1 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced572"),
+            "service_code": "ZAKAT",
+            "service_name": "Zakat",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 300000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 2 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced571"),
+            "service_code": "QURBAN",
+            "service_name": "Qurban",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 200000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 3 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced570"),
+            "service_code": "VOUCHER_MAKANAN",
+            "service_name": "Voucher Makanan",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 100000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 4 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced56f"),
+            "service_code": "VOUCHER_GAME",
+            "service_name": "Voucher Game",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 100000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 5 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced56e"),
+            "service_code": "PAKET_DATA",
+            "service_name": "Paket data",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 50000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 6 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced56d"),
+            "service_code": "TV",
+            "service_name": "TV Berlangganan",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 50000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 7 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced56c"),
+            "service_code": "MUSIK",
+            "service_name": "Musik Berlangganan",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 50000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 8 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced56b"),
+            "service_code": "PGN",
+            "service_name": "PGN Berlangganan",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 50000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 9 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced56a"),
+            "service_code": "PULSA",
+            "service_name": "Pulsa",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 40000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 10 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced569"),
+            "service_code": "PDAM",
+            "service_name": "PDAM Berlangganan",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 40000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 11 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced568"),
+            "service_code": "PLN",
+            "service_name": "Listrik",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 10000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+
+        /* 12 createdAt:12/9/2024, 10:52:39 AM*/
+        {
+            "_id": ObjectId("6756698707c8112300ced567"),
+            "service_code": "PAJAK",
+            "service_name": "Pajak PBB",
+            "service_icon": "https://nutech-integrasi.app/dummy.jpg",
+            "service_tariff": 40000,
+            "status": "active",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }])
