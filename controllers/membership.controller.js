@@ -32,7 +32,7 @@ import { Login } from '../services/login.service.js';
  */
 
 async function RegisterMembershipController(req, res) {
-  // try {
+  try {
     // get data from body
     const { email, first_name, last_name, password } = req.body;
 
@@ -57,7 +57,6 @@ async function RegisterMembershipController(req, res) {
       password,
     });
 
-    console.log('check before update');
     // end section validate input
 
     // call function to create user
@@ -67,29 +66,28 @@ async function RegisterMembershipController(req, res) {
       last_name,
       password,
     });
-    console.log('check after update');
 
     return res.status(200).json(resultCreateUser);
-  // } catch (error) {
-  //   // log the error
-  //   console.error('Error in RegisterMembershipController:', error);
+  } catch (error) {
+    // log the error
+    console.error('Error in RegisterMembershipController:', error);
 
-  //   if (error.status === 400) {
-  //     // return error to api
-  //     res.status(400).json({
-  //       status: 102,
-  //       message: error.message,
-  //       data: null,
-  //     });
-  //   } else {
-  //     // return error to api
-  //     res.status(500).json({
-  //       status: 102,
-  //       message: error.message,
-  //       data: null,
-  //     });
-  //   }
-  // }
+    if (error.status === 400) {
+      // return error to api
+      res.status(400).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    } else {
+      // return error to api
+      res.status(500).json({
+        status: 102,
+        message: error.message,
+        data: null,
+      });
+    }
+  }
 }
 
 /**
