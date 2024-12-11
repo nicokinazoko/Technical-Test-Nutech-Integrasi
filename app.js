@@ -8,8 +8,6 @@ import MembershipRoutes from './routes/membership.route.js';
 import TransactionRoutes from './routes/transaction.route.js';
 const app = express();
 
-app.use(express.json());
-
 app.use('/', [InformationRoutes, MembershipRoutes, TransactionRoutes]);
 
 import './db/config.js';
@@ -29,5 +27,7 @@ cloudinary.config({
 });
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.listen(port);
