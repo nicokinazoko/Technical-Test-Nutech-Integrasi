@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env-dev' });
 
 const url =
-  process.env.DB_ENV === 'localhost'
+  process.env.SERVER_ENV !== 'local'
     ? `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}`
     : `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`;
 
