@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cloudinary from 'cloudinary';
+import cors from 'cors';
 
 import InformationRoutes from './routes/information.route.js';
 import MembershipRoutes from './routes/membership.route.js';
@@ -26,5 +27,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+app.use(cors());
 
 app.listen(port);
