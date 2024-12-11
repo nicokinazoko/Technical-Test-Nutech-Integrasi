@@ -7,7 +7,7 @@ dotenv.config({ path: '.env-dev' });
 const url =
   process.env.SERVER_ENV === 'railway'
     ? `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.MONGOPORT}/${process.env.DB_NAME}?authSource=admin`
-    : `mongodb://${process.env.DB_HOST}:27017/${process.env.DB_NAME}`;
+    : `mongodb://${process.env.DB_HOST}:${process.env.MONGOPORT}/${process.env.DB_NAME}`;
 
 console.log('MongoDB Connection URL:', url);
 
