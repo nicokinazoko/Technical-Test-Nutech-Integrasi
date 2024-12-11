@@ -4,21 +4,16 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env-dev' });
 
 const url =
-  process.env.SERVER_ENV !== 'local'
-    ? `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}`
+  process.env.SERVER_ENV === 'railway'
+    ? `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.MONGO_PUBLIC_URL}/${process.env.DB_NAME}?authSource=admin`
     : `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`;
+console.log('MongoDB Connection URL:', url);
 
-console.log(url);
-//add database
-mongoose.connect(url);
+mongoose
+  .connect(url)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-console.log(process.env.DB_HOST, process.env.DB_NAME);
-
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error'));
-db.once('open', function callback() {
-  console.log('Connection with database succeeded.');
-});
-
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 export { db };
