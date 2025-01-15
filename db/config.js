@@ -5,7 +5,7 @@ dotenv.config({ path: '.env-dev' });
 
 // Construct the correct MongoDB connection URL
 const url =
-  process.env.SERVER_ENV === 'railway'
+  process.env.SERVER_ENV === 'aws'
     ? process.env.MONGO_PUBLIC_URL
     : `mongodb://${process.env.DB_HOST}:${process.env.MONGOPORT}/${process.env.DB_NAME}`;
 
