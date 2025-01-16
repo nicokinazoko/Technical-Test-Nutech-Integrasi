@@ -6,7 +6,7 @@ import VerifyJWTToken from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/banners', GetAllBannersController);
+router.get('/banner', GetAllBannersController);
 router.get('/services', VerifyJWTToken, GetAllServicesController);
 
 export default router;
